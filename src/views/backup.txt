@@ -1,0 +1,274 @@
+import employee from "../entity"
+
+/**
+ * ... is same as above presented
+ * emp is employee entity
+ * @param { * } @param1 date1 @param2 date2
+ * returns = Object({
+ *  complete: {
+ *      present: {
+ *          "01-01-2019": [
+ *              emp1, emp2, emp3
+ *          ]
+ *      }
+ *      ...absent,
+ *      ...earlyArrival,
+ *      ...productivity
+ *  },
+ * 
+ *  count: {
+ *      presentRaw: [12, 11, 12, 8],
+ *      absentRaw: [0, 1, 0, 4],
+ *      ...earlyArrivalRaw,
+ *      ...productivityRaw
+ *  }
+ *  function's :-
+ *  today(): {
+ *      online: number,
+ *      offline: number,
+ *      ... all analysis
+ *      data: {
+ *          online: [emp1, emp2]
+ *      }
+ *  }
+ * })
+ */
+
+export default function buildAnalyser({getEmployees, getDate,dateDiffInDays}) {
+    return function (opts = {
+        aboveThanPer: 75,
+        belowThanPer: 33
+    }) { 
+        return new Promise((res, rej) => {
+            getEmployees().then((data) => {
+                const {aboveThanPer, belowThanPer} = opts
+                const totalDays = dateDiffInDays()
+                //confirms and edits that date2 > date1
+                let employees = []
+                data.forEach(element => {
+                    let id = element.id, doc = element.data()
+                    const emp = new employee({id, ...doc})
+                    
+                    employees.push(emp)
+                });
+
+                /**
+                 * make analyser object for get employees
+                 */
+                const analyser = {
+                    getTotalEmployee: () => employees.length,
+                    getAnalysis: (d1 = new Date(), d2 = new Date(), opts = {}) => {
+                        const {criticalFail, criticalregular} = opts
+                        //confirms and edits that date2 > date1
+                        let date2 = d2 > d1 ? d2 : d1
+                        let date1 = d2 > d1 ? d1 : d2
+                        let result = {
+                            complete: {
+                                present: {},
+                                absent: {},
+                                earlyArrival: {},
+                                productivity: {}
+                            },
+                            count: {
+                                present: [],
+                                absent: [],
+                                earlyArrival: [],
+                                productivity: []
+                            },
+                            today: {
+                                present: 0,
+                                absent: 0,
+                                earlyArrival: 0,
+                                productivity: 0
+                            }
+                        }, 
+                        i=0,
+                        onlineData = [],
+                        offlineData = [],
+                        online = 0,
+                        offline = 0,
+                        countAbove = 0, countbelow = 0;
+
+                            
+                        /**
+                         * counts for ith day out side loop
+                         */
+                        while(date1 <= date2) {
+                            let presentCount = 0,
+                                absentCount = 0,
+                                earlyArrivalCount = 0,
+                                productivityCount = 0,
+                                productivityArr = [],
+                                presentArr = [],
+                                absentArr = [],
+                                earlyArrivalArr = []
+
+
+                            
+
+                            /**
+                             * check in all employees
+                             * get detail analysis for the same
+                             */
+                            employees.forEach((emp, idx) => {
+                                /**
+                                 * It runs for only one time
+                                 * use here to check 
+                                 * if employee is online and offline on present date 
+                                 */
+                                if(i==0) {
+                                    let todayRef = getDate(new Date())
+                                    if(emp.checkIsOnline(todayRef)) {
+                                        online += 1
+                                        onlineData.push(emp)
+                                    } else {
+                                        offline += 1
+                                        offlineData.push(emp)
+                                    }
+                                }
+
+                                /**
+                                 * use employee entity to
+                                 * get functions such as
+                                 *  - checkIsPresent
+                                 *  - checkEarlyArrival
+                                 *  - getProductivity
+                                 */
+
+                                const attnIn = emp.countAttnInRange(date1, date2)
+                                if(attnIn > (aboveThanPer * totalDays) / 100) {
+                                    countAbove += 1
+                                }
+                                if(attnIn > (belowThanPer * totalDays) / 100) {
+                                    countbelow += 1
+                                }
+
+                                if(emp.checkIsPresent(date1)) {
+                                    presentCount += 1
+
+                                    if(emp.checkEarlyArrival(date1)) {
+                                        earlyArrivalCount += 1
+
+                                        // Handle hashing
+                                        earlyArrivalArr.push(emp)
+                                    }
+
+                                    // Handle hashing
+                                        presentArr.push(emp)
+                                } else {
+                                    absentCount += 1
+                                    absentArr.push(emp)
+                                }
+                            })
+                            
+                            /**
+                             * Completes the count feild in result
+                             */
+                            result.count.present.push(presentCount)
+                            result.count.absent.push(absentCount)
+                            result.count.earlyArrival.push(earlyArrivalCount)
+                            result.count.productivity.push(productivityCount)
+                            /**
+                             * Completes the complete feild in result
+                             */
+                            let ithDateRef = getDate(date1)
+                            result.complete.present[ithDateRef] = presentArr
+                            result.complete.absent[ithDateRef] = absentArr
+                            result.complete.earlyArrival[ithDateRef] = earlyArrivalArr
+                            result.complete.productivity[ithDateRef] = productivityArr
+
+                            i+=1
+                            date1.setDate(date1.getDate() + 1)
+                        }
+                        
+                        return Object.freeze({
+                            ...result,
+                            getRegular: () => countAbove,
+                            getIrregular: () => countbelow 
+                        })
+                    },
+                    getAnalysisOnDate: (date) => {
+                        /**
+                         * Make a function to extract
+                         * todays information
+                         */
+                        
+                        let dateRef = getDate(date)
+                        let Analysis = {
+                            online: 0,
+                            offline: 0,
+                            earlyArrival: 0,
+                            productivity: 0,
+                            present: 0,
+                            absent: 0,
+                            data: {
+                                online: [],
+                                offline: [],
+                                earlyArrival: [],
+                                productivity: [],
+                                present: [],
+                                absent: []
+                            }
+                        }
+                        employees.forEach((data, idx) => {
+                            if(data.checkIsPresent(dateRef)) {
+                                Analysis.present += 1
+                                Analysis.data.present.push(data)
+
+                                if(data.checkIsOnline() && getDate(date) === getDate(new Date())) {
+                                    Analysis.online += 1
+                                    Analysis.data.online.push(data)
+                                }
+
+                                if(!data.checkIsOnline() && getDate(date) === getDate(new Date())) {
+                                    Analysis.offline += 1
+                                    Analysis.data.offline.push(data)
+                                }
+
+                                if(data.checkEarlyArrival(dateRef)) {
+                                    Analysis.earlyArrival += 1 
+                                    Analysis.data.checkEarlyArrival.push(data)
+                                }
+                            }
+                        })
+
+                        /**
+                         * Fill today's analysis form
+                         */
+                        return Object.freeze({
+                            ...Analysis
+                        })
+                    }
+                }
+
+                const getEmpsByDept = (arr) => {
+                    let departments = {}
+
+                    employees.forEach((emp, idx) => {
+                        const dep = emp.getDepartment()
+                        
+                        if(dep !== "") {
+                            if(dep in departments) {
+                                departments[dep].push(emp)
+                            } else {
+                                departments[dep] = [emp]
+                            }
+                        }
+                    })
+
+                    return departments
+                }
+
+                res(Object.freeze({
+                    ...analyser,
+                    getEmpsByDept
+                }))
+            }).catch(err => {
+                console.log(err)
+                rej({
+                    log: err
+                })
+            })
+        })
+    }
+}

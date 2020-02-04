@@ -1,0 +1,197 @@
+body {
+    background-color: #F7F7F7;
+    padding: 0;
+    margin: 0;
+}
+
+.active-date {
+    background-color: peru !important;
+}
+
+/* .cal {
+    box-shadow: 0px 0 10px rgba(0, 0, 0, 0.8);
+} */
+
+.day-item {
+    border-bottom: 1px solid #CCCCCC; 
+    border-left: 1px solid #CCCCCC; 
+    border-top: 1px solid #CCCCCC;
+}
+
+.date {
+    height: 5rem;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    background-color: white;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.date-item { 
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 0;
+    border-bottom: 1px solid #CCCCCC;
+    border-left: 1px solid #CCCCCC;
+}
+
+.dot {
+    background-color: gray;
+    height: .5rem;
+    width: .5rem;
+    border-radius: 50%;
+}
+
+
+.date-text {
+    width: inherit;
+    background-color: inherit;
+    height: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-radius: 50%;
+    transition: .3s ease;
+    font-size: 1rem;
+    text-align: center;
+}
+
+
+.text-dot-wrapper {
+    width: 2rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.date-text:hover {
+    background-color: rgba(205,133,63, 0.5);
+}
+
+.leaf {
+    border-right: 1px solid #CCCCCC;
+}
+
+
+@media (max-width: 768px) {
+    .date {
+        border: none;
+        height: auto;
+    }
+    .day-item {
+        border: none;
+        border-bottom: 1px solid #CCCCCC;
+        background-color: inherit;
+        color: black !important;
+    }
+    .date-text {
+        padding: 0 !important;
+        margin: 0 !important;
+        height: 1.4rem;
+        font-size: .9rem !important;
+    }
+    .text-dot-wrapper {
+        width: 1.4rem;
+    }
+    .date-item {
+        align-items: center;
+        justify-content: center;
+        border: none;
+        border-bottom: 1px solid #CCCCCC;
+    }
+    .calander-days-item {
+        text-align: center;
+    }
+    .date-text {
+        margin-top: 2px !important;
+        font-size: 1rem;
+    }
+    .dot {
+        margin-top: 2px;
+        margin-bottom: 4px;
+        height: .33rem;
+        width: .33rem;
+    }
+    .leaf {
+        border-right: none;
+    }
+}
+
+/*
+
+.calander-days-item {
+    width: 14.28571428571429%;
+    float: left;
+    text-align: end;
+    border-bottom: 1px solid #cccccc;
+}
+
+.calander-body {
+    overflow-x: hidden;
+    overflow-y: hidden;
+    clear: both;
+}
+
+.calander-body-items {
+    border-bottom: 1px solid #CCCCCC;
+    border-right: 1px solid #CCCCCC;
+    height: 5rem;
+    width: 14.28571428% ;
+    float: left;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    background-color: white;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: flex-end;
+}
+
+#slider {
+    overflow-x: hidden;
+    display: flex;
+}
+
+
+#slider-items {
+    color: blue;
+    width: 100vw;
+    flex-shrink: 0;
+}
+
+
+
+
+
+
+
+
+
+
+@media (max-width: 768px) {
+    .calander-body-items {
+        border: none;
+        height: auto;
+        align-items: center;
+        justify-content: center;
+    }
+    .calander-days-item {
+        text-align: center;
+    }
+    .date-text {
+        margin-bottom: 3px;
+        font-size: 1rem;
+        margin-top: .5rem;
+    }
+    .dot {
+        height: .33rem;
+        width: .33rem;
+    }
+    .last {
+        border-bottom: 1px solid #CCCCCC;
+    }
+} */
