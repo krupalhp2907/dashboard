@@ -4,14 +4,24 @@ export default function makeFirebase({app, employee, auth, rfid}) {
 		save,
 		login,
 		authListner,
-		getEmployeeById
+		getEmployeeById,
+		rfidListner,
+		getEmployeeByEmail
 	})
 	function getEmployees() {
 		return employee.get()
 	}
 
+	function rfidListner(id) {
+		return rfid.doc(id)
+	}
+
 	function getEmployeeById(id) {
 		return employee.doc(id)
+	}
+
+	function getEmployeeByEmail(email) {
+		return employee.where("email", "==", email).get()
 	}
 	
 	function login(email, password) {

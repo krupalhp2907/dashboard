@@ -23,7 +23,7 @@ class fb {
     }
     getEmployee = () => this.firestore.collection("employee")
     getApp = () => app
-    getRfid = () => this.firestore.collection('rfid')
+    getRfid = () => this.firestore.collection('temp_rfid')
     getAuth = () => this.auth
 }
 

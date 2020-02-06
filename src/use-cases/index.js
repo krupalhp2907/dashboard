@@ -3,18 +3,21 @@ import buildAnalyser from "./analyser"
 import buildSaveEmployee from "./save-employee" 
 import buildGetEmployee from "./get-Employees"
 import buildLogin from "./build-login"
+import buildRfidListner from "./rfid-listner"
 
-const {getEmployees, save, login} = db
+const {getEmployees, save, login, rfidListner} = db
 const analyser = buildAnalyser({getEmployees, getDate,dateDiffInDays})
 const saveEmployee = buildSaveEmployee({save})
 const ge = buildGetEmployee({getEmployees})
 const ll = buildLogin({login, isValidEmail})
+const rfid = buildRfidListner({rfidListner})
 
 export default Object.freeze({
 	analyser,
 	save: saveEmployee,
 	getEmployees: ge,
-	login: ll
+	login: ll,
+	rfidHandler: rfid
 })
 
 // getDate
