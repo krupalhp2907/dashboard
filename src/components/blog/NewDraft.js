@@ -10,36 +10,39 @@ import {
   FormTextarea,
   Button
 } from "shards-react";
+import {withFirebase} from "../../controller"
 
-const NewDraft = ({ title }) => (
-  <Card small className="h-100">
-    {/* Card Header */}
-    <CardHeader className="border-bottom">
-      <h6 className="m-0">{title}</h6>
-    </CardHeader>
-
-    <CardBody className="d-flex flex-column">
-      <Form className="quick-post-form">
-        {/* Title */}
-        <FormGroup>
-          <FormInput placeholder="Brave New World" />
-        </FormGroup>
-
-        {/* Body */}
-        <FormGroup>
-          <FormTextarea placeholder="Words can be like X-rays if you use them properly..." />
-        </FormGroup>
-
-        {/* Create Draft */}
-        <FormGroup className="mb-0">
-          <Button theme="accent" type="submit">
-            Create Draft
-          </Button>
-        </FormGroup>
-      </Form>
-    </CardBody>
-  </Card>
-);
+const NewDraft = ({ title }) => {
+  return (
+    <Card small className="h-100">
+      {/* Card Header */}
+      <CardHeader className="border-bottom">
+        <h6 className="m-0">{title}</h6>
+      </CardHeader>
+  
+      <CardBody className="d-flex flex-column">
+        <Form className="quick-post-form">
+          {/* Title */}
+          <FormGroup>
+            <FormInput placeholder="Brave New World" />
+          </FormGroup>
+  
+          {/* Body */}
+          <FormGroup>
+            <FormTextarea placeholder="Words can be like X-rays if you use them properly..." />
+          </FormGroup>
+  
+          {/* Create Draft */}
+          <FormGroup className="mb-0">
+            <Button theme="accent" type="submit">
+              Create Draft
+            </Button>
+          </FormGroup>
+        </Form>
+      </CardBody>
+    </Card>
+  )
+};
 
 NewDraft.propTypes = {
   /**
@@ -52,4 +55,4 @@ NewDraft.defaultProps = {
   title: "New Draft"
 };
 
-export default NewDraft;
+export default withFirebase(NewDraft);
