@@ -5,14 +5,7 @@ import 'firebase/auth'
 
 
 const firebaseConfig = {
-	apiKey: "AIzaSyAwiovUCLsjWXMcTdb-3t6cT93rarJogp0",
-	authDomain: "first-firebase-learning.firebaseapp.com",
-	databaseURL: "https://first-firebase-learning.firebaseio.com",
-	projectId: "first-firebase-learning",
-	storageBucket: "first-firebase-learning.appspot.com",
-	messagingSenderId: "643311198085",
-	appId: "1:643311198085:web:850c484c5bd83a384daeec",
-	measurementId: "G-S624QJKCZC"
+  // Enter your firebase credentials
 };
 
 class fb {
